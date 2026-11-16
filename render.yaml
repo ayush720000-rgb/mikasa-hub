@@ -1,0 +1,41 @@
+# Render Blueprint: one web service that hosts the Chess, Ludo and UNO bots.
+# Python for UNO (3.14) is set in the Dockerfile with uv, so no Python version is set here.
+# Render -> New -> Blueprint -> pick this repo. Then fill in the secret values.
+services:
+  - type: web
+    name: mikasa-bots
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      # One bot token per bot. Each must come from a different BotFather bot.
+      # Two services polling the same token will conflict (Telegram error 409).
+      - key: CHESS_BOT_TOKEN
+        sync: false
+      - key: LUDO_BOT_TOKEN
+        sync: false
+      - key: UNO_BOT_TOKEN
+        sync: false
+      # Bot handles without the @, used for links and the Mini App.
+      - key: CHESS_BOT_USERNAME
+        sync: false
+      - key: LUDO_BOT_USERNAME
+        sync: false
+      # UNO bot handle (without @), used for the status page link.
+      - key: UNO_BOT_USERNAME
+        sync: false
+      # Neon Postgres connection string. Ludo and UNO store their data here, so it survives
+      # redeploys. Leave empty to use the local files instead.
+      - key: DATABASE_URL
+        sync: false
+      # Handle (without @) of the main bot that the "Main Bot" button opens.
+      - key: MAIN_BOT_USERNAME
+        value: Ig_MikasaBot
+      # Mini App short names as set in BotFather (defaults: Chess, ludo).
+      - key: CHESS_MINIAPP_SHORT_NAME
+        value: Chess
+      - key: LUDO_MINIAPP_SHORT_NAME
+        value: ludo

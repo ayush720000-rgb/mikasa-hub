@@ -1,0 +1,26 @@
+# Dependencies and build output
+node_modules/
+dist/
+build/
+coverage/
+
+# Runtime data (databases, uploads). Created by the apps at start-up.
+data/
+*.sqlite3
+*.log
+
+# Secrets
+.env
+.env.*
+!.env.example
+config.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
